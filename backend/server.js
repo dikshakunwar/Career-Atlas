@@ -1,5 +1,11 @@
 const express = require("express");
 const jobRoutes = require("./routes/jobRoutes");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
+
+dotenv.config();
+
+connectDB();
 const app = express();
 
 app.get("/", (req, res) => {
