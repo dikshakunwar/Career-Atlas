@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 function Navbar() {
-  const { token, logout } = useContext(AuthContext);
+  const { token, user, logout } = useContext(AuthContext);
 
   return (
     <nav
@@ -15,10 +15,15 @@ function Navbar() {
     >
       <h2>CareerAtlas</h2>
 
-      <div style={{ display: "flex", gap: "20px" }}>
+      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
         <Link to="/">Home</Link>
-
         <Link to="/map">Map</Link>
+
+        {token && user?.role === "recruiter" && (
+          <Link to="/dashboard">Dashboard</Link>
+        )}
+
+        {token && user?.name && <span>Hi, {user.name}</span>}
 
         {!token ? (
           <>
