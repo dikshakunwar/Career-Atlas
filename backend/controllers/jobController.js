@@ -30,7 +30,28 @@ const getAllJobs = async (req, res) => {
     });
   }
 };
+const getJobById = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id).populate(
+      "recruiter",
+      "name email",
+    );
+
+    if (!job) {
+      return res.status(404).json({
+        message: "Job not found",
+      });
+    }
+
+    res.json(job);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
 module.exports = {
   createJob,
   getAllJobs,
+  getJobById,
 };
