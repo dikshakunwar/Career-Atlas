@@ -8,6 +8,8 @@ function Map() {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [jobs, setJobs] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const selectedMarker = useRef(null);
 
   useEffect(() => {
     if (map.current) return;
@@ -17,6 +19,44 @@ function Map() {
       style: "mapbox://styles/mapbox/streets-v12",
       center: [78.9629, 20.5937],
       zoom: 4,
+    });
+
+    map.current.on("click", (e) => {
+      const { lng, lat } = e.lngLat;
+
+      setSelectedLocation({
+        latitude: lat,
+        longitude: lng,
+      });
+
+      if (selectedMarker.current) {
+        selectedMarker.current.remove();
+      }
+
+      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
+    <div>
+      <h3>Selected Location</h3>
+      <button id="post-job-btn">Post Job Here</button>
+    </div>
+  `);
+
+      selectedMarker.current = new mapboxgl.Marker({ color: "red" })
+        .setLngLat([lng, lat])
+        .setPopup(popup)
+        .addTo(map.current);
+
+      selectedMarker.current.togglePopup();
+    });
+    map.current.on("load", () => {
+      map.current.on("click", (e) => {
+        console.log("Map clicked");
+        console.log(e.lngLat);
+
+        setSelectedLocation({
+          latitude: e.lngLat.lat,
+          longitude: e.lngLat.lng,
+        });
+      });
     });
 
     const fetchJobs = async () => {
@@ -30,6 +70,9 @@ function Map() {
 
     fetchJobs();
   }, []);
+  useEffect(() => {
+    console.log("Selected Location:", selectedLocation);
+  }, [selectedLocation]);
 
   useEffect(() => {
     if (!map.current) return;
@@ -53,7 +96,6 @@ function Map() {
         .addTo(map.current);
     });
   }, [jobs]);
-
   return (
     <div
       ref={mapContainer}
@@ -64,4 +106,5 @@ function Map() {
     />
   );
 }
+
 export default Map;
