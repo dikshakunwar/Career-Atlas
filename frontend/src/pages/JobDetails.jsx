@@ -22,7 +22,32 @@ function JobDetails() {
   if (!job) {
     return <h2>Loading...</h2>;
   }
+  const handleApply = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
+      if (!token) {
+        alert("Please login first");
+        return;
+      }
+
+      const res = await API.post(
+        "/applications",
+        {
+          jobId: job._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      alert(res.data.message);
+    } catch (err) {
+      alert(err.response?.data?.message || "Application failed");
+    }
+  };
   return (
     <div style={{ padding: "30px" }}>
       <h1>{job.title}</h1>
@@ -51,7 +76,7 @@ function JobDetails() {
         <strong>Skills:</strong> {job.skills.join(", ")}
       </p>
 
-      <button>Apply Now</button>
+      <button onClick={handleApply}>Apply Now</button>
     </div>
   );
 }

@@ -7,7 +7,9 @@ function RecruiterDashboard() {
 
   const [jobs, setJobs] = useState([]);
   const [editingJob, setEditingJob] = useState(null);
-
+  const [applicants, setApplicants] = useState([]);
+  const [showApplicants, setShowApplicants] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
   const [editData, setEditData] = useState({
     title: "",
     company: "",
@@ -38,14 +40,50 @@ function RecruiterDashboard() {
 
     fetchMyJobs();
   }, []);
+  const handleStatusUpdate = async (applicationId, status) => {
+    try {
+      const res = await API.put(
+        `/applications/${applicationId}`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
 
+      setApplicants(
+        applicants.map((app) => (app._id === applicationId ? res.data : app)),
+      );
+
+      alert(`Application ${status}`);
+    } catch (err) {
+      console.log(err);
+      alert("Failed to update status");
+    }
+  };
   const handleEditChange = (e) => {
     setEditData({
       ...editData,
       [e.target.name]: e.target.value,
     });
   };
+  const handleViewApplicants = async (jobId) => {
+    try {
+      const res = await API.get(`/applications/${jobId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
+      setApplicants(res.data);
+      setSelectedJob(jobId);
+      setShowApplicants(true);
+    } catch (err) {
+      console.log(err);
+      alert("Failed to load applicants");
+    }
+  };
   const handleUpdate = async () => {
     try {
       const res = await API.put(
@@ -132,7 +170,9 @@ function RecruiterDashboard() {
               <strong>Salary:</strong> ₹{job.salary}
             </p>
 
-            <button>View Applicants</button>
+            <button onClick={() => handleViewApplicants(job._id)}>
+              View Applicants
+            </button>
 
             <button
               style={{ marginLeft: "10px" }}
@@ -305,6 +345,75 @@ function RecruiterDashboard() {
 
               <button onClick={() => setEditingJob(null)}>Cancel</button>
             </div>
+          </div>
+        </div>
+      )}
+      {showApplicants && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              background: "#fff",
+              width: "600px",
+              maxHeight: "80vh",
+              overflowY: "auto",
+              padding: "20px",
+              borderRadius: "10px",
+            }}
+          >
+            <h2>Applicants</h2>
+
+            {applicants.length === 0 ? (
+              <p>No applicants yet.</p>
+            ) : (
+              applicants.map((app) => (
+                <div
+                  key={app._id}
+                  style={{
+                    border: "1px solid #ddd",
+                    padding: "15px",
+                    marginBottom: "15px",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <h3>{app.applicant.name}</h3>
+
+                  <p>{app.applicant.email}</p>
+
+                  <p>
+                    <strong>Status:</strong> {app.status}
+                  </p>
+                  <div style={{ marginTop: "10px" }}>
+                    <button
+                      onClick={() => handleStatusUpdate(app._id, "Accepted")}
+                    >
+                      Accept
+                    </button>
+
+                    <button
+                      style={{ marginLeft: "10px" }}
+                      onClick={() => handleStatusUpdate(app._id, "Rejected")}
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+
+            <button onClick={() => setShowApplicants(false)}>Close</button>
           </div>
         </div>
       )}

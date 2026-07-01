@@ -51,9 +51,8 @@ const updateJob = async (req, res) => {
         message: "Unauthorized",
       });
     }
-
     const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 
