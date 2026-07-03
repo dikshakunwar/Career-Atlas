@@ -37,6 +37,21 @@ const updateApplicationStatus = async (req, res) => {
     });
   }
 };
+const getMyApplications = async (req, res) => {
+  try {
+    const applications = await Application.find({
+      applicant: req.user.id,
+    })
+      .populate("job")
+      .populate("applicant", "name email");
+
+    res.json(applications);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
 const applyForJob = async (req, res) => {
   try {
     const { jobId } = req.body;
@@ -72,4 +87,5 @@ module.exports = {
   applyForJob,
   getApplicants,
   updateApplicationStatus,
+  getMyApplications,
 };

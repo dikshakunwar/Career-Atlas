@@ -9,7 +9,7 @@ function Register() {
     name: "",
     email: "",
     password: "",
-    role: "user",
+    role: "candidate",
   });
 
   const handleChange = (e) => {
@@ -77,7 +77,7 @@ function Register() {
         />
 
         <select name="role" value={formData.role} onChange={handleChange}>
-          <option value="user">User</option>
+          <option value="candidate">Candidate</option>
           <option value="recruiter">Recruiter</option>
         </select>
 

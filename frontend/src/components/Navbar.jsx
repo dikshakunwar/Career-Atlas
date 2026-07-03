@@ -22,7 +22,9 @@ function Navbar() {
         {token && user?.role === "recruiter" && (
           <Link to="/dashboard">Dashboard</Link>
         )}
-
+        {token && user?.role === "user" && (
+          <Link to="/candidate-dashboard">My Applications</Link>
+        )}
         {token && user?.name && <span>Hi, {user.name}</span>}
 
         {!token ? (

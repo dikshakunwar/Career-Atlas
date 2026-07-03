@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import API from "../services/api";
+import { AuthContext } from "../context/AuthContext";
 
 function JobDetails() {
   const { id } = useParams();
+  const { user } = useContext(AuthContext);
   const [job, setJob] = useState(null);
 
   useEffect(() => {
@@ -76,7 +78,9 @@ function JobDetails() {
         <strong>Skills:</strong> {job.skills.join(", ")}
       </p>
 
-      <button onClick={handleApply}>Apply Now</button>
+      {user?.role === "user" && (
+        <button onClick={handleApply}>Apply Now</button>
+      )}
     </div>
   );
 }
