@@ -9,6 +9,7 @@ import RecruiterDashboard from "./pages/RecruiterDashboard";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import CandidateDashboard from "./pages/CandidateDashboard";
+import CandidateProfile from "./pages/CandidateProfile";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/job/:id" element={<JobDetails />} />
         <Route path="/dashboard" element={<RecruiterDashboard />} />
         <Route path="/candidate-dashboard" element={<CandidateDashboard />} />
+        <Route path="/candidate/:id" element={<CandidateProfile />} />
       </Routes>
     </>
   );

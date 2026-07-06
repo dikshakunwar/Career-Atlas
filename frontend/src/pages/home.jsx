@@ -14,7 +14,7 @@ function Home() {
       }}
     >
       <h1 style={{ fontSize: "3rem", marginBottom: "20px" }}>
-        Find Jobs Across the World 🌍
+        Find Jobs Across the World
       </h1>
 
       <p

@@ -408,6 +408,15 @@ function RecruiterDashboard() {
                     >
                       Reject
                     </button>
+
+                    <button
+                      style={{ marginLeft: "10px" }}
+                      onClick={() =>
+                        navigate(`/candidate/${app.applicant._id}`)
+                      }
+                    >
+                      View Profile
+                    </button>
                   </div>
                 </div>
               ))
