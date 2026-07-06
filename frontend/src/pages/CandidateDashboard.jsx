@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import EditProfileModal from "../components/EditProfileModal";
 
 function CandidateDashboard() {
   const [applications, setApplications] = useState([]);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -27,7 +29,9 @@ function CandidateDashboard() {
   return (
     <div style={{ padding: "30px" }}>
       <h1>My Applications</h1>
-
+      <div style={{ marginBottom: "20px" }}>
+        <button onClick={() => setShowProfileModal(true)}>Edit Profile</button>
+      </div>
       {applications.length === 0 ? (
         <p>You haven't applied to any jobs yet.</p>
       ) : (
@@ -67,6 +71,10 @@ function CandidateDashboard() {
             </div>
           ))
       )}
+      <EditProfileModal
+        show={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+      />
     </div>
   );
 }
