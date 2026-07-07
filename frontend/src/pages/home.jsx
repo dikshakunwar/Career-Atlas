@@ -1,45 +1,66 @@
-import { Link } from "react-router-dom";
+import { Search, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const navigate = useNavigate();
+
   return (
-    <div
-      style={{
-        height: "90vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-        flexDirection: "column",
-        padding: "20px",
-      }}
-    >
-      <h1 style={{ fontSize: "3rem", marginBottom: "20px" }}>
-        Find Jobs Across the World
-      </h1>
+    <div className="min-h-screen bg-slate-50">
+      {/* Hero */}
 
-      <p
-        style={{
-          maxWidth: "700px",
-          fontSize: "18px",
-          marginBottom: "30px",
-        }}
-      >
-        Explore jobs visually on an interactive map. Zoom into countries,
-        states, and cities to discover opportunities exactly where they are
-        located.
-      </p>
-
-      <Link to="/map">
-        <button
-          style={{
-            padding: "15px 30px",
-            fontSize: "18px",
-            cursor: "pointer",
-          }}
+      <section className="max-w-6xl mx-auto px-6 py-24">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
         >
-          Explore Jobs
-        </button>
-      </Link>
+          <p className="text-gray-500 font-medium uppercase tracking-[5px]">
+            Welcome to CareerAtlas
+          </p>
+
+          <h1 className="mt-5 text-6xl font-bold text-gray-900 leading-tight">
+            Connecting Talent
+            <br />
+            With Opportunity
+          </h1>
+
+          <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto">
+            Discover verified job opportunities from trusted companies and take
+            the next step in your professional journey.
+          </p>
+
+          {/* Search */}
+
+          <div className="mt-12 flex justify-center">
+            <div className="bg-white shadow-lg rounded-2xl flex items-center px-5 py-3 w-full max-w-xl">
+              <Search className="text-gray-400" />
+
+              <input
+                type="text"
+                placeholder="Search jobs..."
+                className="flex-1 outline-none px-4 text-gray-700"
+              />
+
+              <button
+                onClick={() => navigate("/map")}
+                className="bg-gray-900 text-white px-5 py-2 rounded-xl hover:bg-black transition"
+              >
+                Search
+              </button>
+            </div>
+          </div>
+
+          <button
+            onClick={() => navigate("/map")}
+            className="mt-10 inline-flex items-center gap-2 text-gray-900 font-medium hover:gap-4 transition-all"
+          >
+            Browse Jobs
+            <ArrowRight size={18} />
+          </button>
+        </motion.div>
+      </section>
     </div>
   );
 }

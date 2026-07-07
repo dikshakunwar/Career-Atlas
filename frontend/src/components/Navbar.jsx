@@ -1,42 +1,126 @@
-import { Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { Briefcase, MapPinned, LayoutDashboard, LogOut } from "lucide-react";
 
 function Navbar() {
   const { token, user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
-    <nav
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "20px",
-      }}
-    >
-      <h2>CareerAtlas</h2>
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-gray-200">
+      <nav className="max-w-7xl mx-auto flex items-center justify-between px-8 py-4">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="text-2xl font-bold tracking-tight text-gray-900 hover:text-gray-700 transition-colors duration-200"
+        >
+          CareerAtlas
+        </Link>
 
-      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-        <Link to="/">Home</Link>
-        <Link to="/map">Map</Link>
+        {/* Navigation */}
+        <div className="flex items-center gap-6 text-sm font-medium">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `pb-1 transition-all duration-200 font-medium hover:scale-105 ${
+                isActive
+                  ? "border-b-2 border-gray-900 text-gray-900"
+                  : "text-gray-600"
+              }`
+            }
+          >
+            Home
+          </NavLink>
 
-        {token && user?.role === "recruiter" && (
-          <Link to="/dashboard">Dashboard</Link>
-        )}
-        {token && user?.role === "user" && (
-          <Link to="/candidate-dashboard">My Applications</Link>
-        )}
-        {token && user?.name && <span>Hi, {user.name}</span>}
+          <NavLink
+            to="/map"
+            className={({ isActive }) =>
+              `flex items-center gap-1 pb-1 transition-all duration-200 font-medium hover:scale-105 ${
+                isActive
+                  ? "border-b-2 border-gray-900 text-gray-900"
+                  : "text-gray-600"
+              }`
+            }
+          >
+            <MapPinned size={18} />
+            Jobs
+          </NavLink>
 
-        {!token ? (
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-          </>
-        ) : (
-          <button onClick={logout}>Logout</button>
-        )}
-      </div>
-    </nav>
+          {token && user?.role === "recruiter" && (
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                `flex items-center gap-1 pb-1 transition-all duration-200 font-medium hover:scale-105 ${
+                  isActive
+                    ? "border-b-2 border-gray-900 text-gray-900"
+                    : "text-gray-600"
+                }`
+              }
+            >
+              <LayoutDashboard size={18} />
+              Dashboard
+            </NavLink>
+          )}
+
+          {token && user?.role === "user" && (
+            <NavLink
+              to="/candidate-dashboard"
+              className={({ isActive }) =>
+                `flex items-center gap-1 pb-1 transition-all duration-200 font-medium hover:scale-105 ${
+                  isActive
+                    ? "border-b-2 border-gray-900 text-gray-900"
+                    : "text-gray-600"
+                }`
+              }
+            >
+              <Briefcase size={18} />
+              My Applications
+            </NavLink>
+          )}
+        </div>
+
+        {/* Right Section */}
+        <div className="flex items-center gap-4">
+          {token && (
+            <span className="text-sm text-gray-600">
+              Hi, <span className="font-semibold">{user?.name}</span>
+            </span>
+          )}
+
+          {!token ? (
+            <>
+              <Link
+                to="/login"
+                className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+              >
+                Login
+              </Link>
+
+              <Link
+                to="/register"
+                className="px-3 py-1.5 text-sm rounded-lg border border-gray-900 bg-gray-900 text-white hover:bg-black hover:scale-105 transition-all duration-200"
+              >
+                Register
+              </Link>
+            </>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
+            >
+              <LogOut size={18} />
+              Logout
+            </button>
+          )}
+        </div>
+      </nav>
+    </header>
   );
 }
 
