@@ -170,8 +170,13 @@ function Map() {
               placeholder="Job Title"
               value={jobData.title}
               onChange={handleChange}
+              style={{
+                width: "100%",
+                padding: "10px",
+                border: "2px solid red",
+                marginBottom: "20px",
+              }}
             />
-
             <br />
             <br />
 
