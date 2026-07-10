@@ -90,146 +90,178 @@ function EditProfileModal({ show, onClose }) {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="relative w-full max-w-xl max-h-[82vh] overflow-y-auto bg-white rounded-xl shadow-xl">
-        {/* Header */}
-        <div className="sticky top-0 bg-white border-b px-5 py-3 flex justify-between items-center">
-          <div>
-            <h2 className="text-lg font-semibold">Edit Profile</h2>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl shadow-xl w-[500] max-h-[90vh] overflow-y-auto p-6 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-xl text-gray-500 hover:text-black"
+        >
+          ×
+        </button>
 
-            <p className="text-xs text-gray-500 mt-0.5">
-              Keep your profile updated for recruiters.
-            </p>
+        <h2 className="text-xl font-semibold mb-6">Edit Profile</h2>
+
+        {formData.resume && (
+          <div className="mb-5 text-sm">
+            <p className="font-medium mb-1">Current Resume</p>
+
+            <a
+              href={`http://localhost:3000/uploads/resumes/${formData.resume}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-gray-950 hover:underline"
+            >
+              View Resume
+            </a>
           </div>
+        )}
 
-          <button
-            onClick={onClose}
-            className="w-9 h-9 rounded-lg hover:bg-gray-100 transition"
-          >
-            ✕
-          </button>
-        </div>
-
-        <div className="p-5">
-          {formData.resume && (
-            <div className="mb-6 rounded-xl border bg-gray-50 p-4 flex justify-between items-center">
-              <div>
-                <p className="text-sm text-gray-500">Current Resume</p>
-
-                <a
-                  href={`http://localhost:3000/uploads/resumes/${formData.resume}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-medium hover:underline"
-                >
-                  View Resume
-                </a>
-              </div>
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">
+              Phone Number
+            </label>
             <input
+              type="text"
               name="phone"
-              placeholder="Phone Number"
+              placeholder="Enter phone number"
               value={formData.phone}
               onChange={handleChange}
-              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
-            />
-
-            <input
-              name="college"
-              placeholder="College"
-              value={formData.college}
-              onChange={handleChange}
-              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
-            />
-
-            <input
-              name="degree"
-              placeholder="Degree"
-              value={formData.degree}
-              onChange={handleChange}
-              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
-            />
-
-            <input
-              name="graduationYear"
-              placeholder="Graduation Year"
-              value={formData.graduationYear}
-              onChange={handleChange}
-              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
-            />
-
-            <input
-              name="experience"
-              placeholder="Experience"
-              value={formData.experience}
-              onChange={handleChange}
-              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
-            />
-
-            <input
-              name="skills"
-              placeholder="Skills"
-              value={formData.skills}
-              onChange={handleChange}
-              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
-            />
-
-            <input
-              name="linkedin"
-              placeholder="LinkedIn URL"
-              value={formData.linkedin}
-              onChange={handleChange}
-              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
-            />
-
-            <input
-              name="github"
-              placeholder="GitHub URL"
-              value={formData.github}
-              onChange={handleChange}
-              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-black"
             />
           </div>
 
-          <input
-            name="portfolio"
-            placeholder="Portfolio Website"
-            value={formData.portfolio}
-            onChange={handleChange}
-            className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black w-full mt-4"
-          />
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">College</label>
+            <input
+              type="text"
+              name="college"
+              placeholder="Enter college name"
+              value={formData.college}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-black"
+            />
+          </div>
 
-          <div className="mt-6">
-            <label className="block text-xs text-gray-500 mb-1">
-              Upload New Resume
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-gray-600 mb-1">Degree</label>
+              <input
+                type="text"
+                name="degree"
+                placeholder="B.Tech CSE"
+                value={formData.degree}
+                onChange={handleChange}
+                className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-black"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs text-gray-600 mb-1">
+                Graduation Year
+              </label>
+              <input
+                type="text"
+                name="graduationYear"
+                placeholder="2027"
+                value={formData.graduationYear}
+                onChange={handleChange}
+                className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-black"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">Skills</label>
+            <input
+              type="text"
+              name="skills"
+              placeholder="React, Node.js, MongoDB"
+              value={formData.skills}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-black"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">
+              Experience
             </label>
+            <input
+              type="text"
+              name="experience"
+              placeholder="2 Years"
+              value={formData.experience}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-black"
+            />
+          </div>
 
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">LinkedIn</label>
+            <input
+              type="text"
+              name="linkedin"
+              placeholder="https://linkedin.com/in/username"
+              value={formData.linkedin}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-black"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">GitHub</label>
+            <input
+              type="text"
+              name="github"
+              placeholder="https://github.com/username"
+              value={formData.github}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-black"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">
+              Portfolio
+            </label>
+            <input
+              type="text"
+              name="portfolio"
+              placeholder="https://portfolio.com"
+              value={formData.portfolio}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-black"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">
+              Upload Resume (PDF)
+            </label>
             <input
               type="file"
               accept=".pdf"
               onChange={handleResume}
-              className="w-full border rounded-lg p-2"
+              className="w-full text-sm border rounded-lg p-2"
             />
           </div>
+        </div>
 
-          <div className="flex justify-end gap-3 mt-8 border-t pt-6">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-sm rounded-md border border-gray-300 hover:bg-gray-100 transition"
-            >
-              Cancel
-            </button>
+        <div className="flex justify-end gap-3 mt-6">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-100"
+          >
+            Cancel
+          </button>
 
-            <button
-              onClick={handleSave}
-              className="px-4 py-2 text-sm rounded-md bg-gray-900 text-white hover:bg-black transition"
-            >
-              Save Changes
-            </button>
-          </div>
+          <button
+            onClick={handleSave}
+            className="px-4 py-2 bg-black text-white rounded-lg text-sm hover:bg-gray-800"
+          >
+            Save Changes
+          </button>
         </div>
       </div>
     </div>
