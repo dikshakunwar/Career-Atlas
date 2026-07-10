@@ -17,3 +17,24 @@ body,
 button {
   cursor: pointer;
 }
+
+.mapboxgl-popup-tip {
+  border-top-color: white !important;
+}
+
+.mapboxgl-popup-close-button {
+  top: 8px;
+  right: 10px;
+  font-size: 18px;
+  color: #6b7280;
+  border: none;
+  background: transparent;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.mapboxgl-popup-close-button:hover {
+  background: #f3f4f6;
+  color: #111827;
+}

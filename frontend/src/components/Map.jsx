@@ -119,18 +119,39 @@ function Map() {
     if (!map.current) return;
     console.log(jobs);
     jobs.forEach((job) => {
-      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
-      <div>
-        <h3>${job.title}</h3>
-        <p><strong>${job.company}</strong></p>
-        <p>${job.location}, ${job.state}</p>
-        <p>₹${job.salary}</p>
-        <button onclick="window.location.href='/job/${job._id}'">
-          View Details
-        </button>
-      </div>
-    `);
+      const popup = new mapboxgl.Popup({
+        offset: 18,
+        maxWidth: "230px",
+      }).setHTML(`
+<div style="font-family:Inter,sans-serif;">
+  <h3 style="margin:0;font-size:16px;font-weight:600;">${job.title}</h3>
 
+  <p style="margin:4px 0 10px;color:#6b7280;font-size:13px;">
+    ${job.company}
+  </p>
+
+  <p style="margin:0;font-size:13px;">📍 ${job.location}</p>
+
+  <p style="margin:6px 0 12px;font-size:13px;">₹${job.salary}</p>
+
+  <a
+    href="/job/${job._id}"
+    style="
+      display:block;
+      text-align:center;
+      text-decoration:none;
+      padding:6px;
+      border-radius:8px;
+      background:#111827;
+      color:white;
+      font-size:13px;
+      font-weight:500;
+    "
+  >
+    View Details
+  </a>
+</div>
+`);
       new mapboxgl.Marker()
         .setLngLat([job.longitude, job.latitude])
         .setPopup(popup)
