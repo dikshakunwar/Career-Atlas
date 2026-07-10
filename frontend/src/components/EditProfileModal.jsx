@@ -90,164 +90,147 @@ function EditProfileModal({ show, onClose }) {
   if (!show) return null;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}
-    >
-      <div
-        style={{
-          width: "600px",
-          maxHeight: "90vh",
-          overflowY: "auto",
-          background: "#fff",
-          borderRadius: "10px",
-          padding: "25px",
-          position: "relative",
-        }}
-      >
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute",
-            right: "15px",
-            top: "10px",
-            border: "none",
-            background: "none",
-            fontSize: "24px",
-            cursor: "pointer",
-          }}
-        >
-          ×
-        </button>
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="relative w-full max-w-xl max-h-[82vh] overflow-y-auto bg-white rounded-xl shadow-xl">
+        {/* Header */}
+        <div className="sticky top-0 bg-white border-b px-5 py-3 flex justify-between items-center">
+          <div>
+            <h2 className="text-lg font-semibold">Edit Profile</h2>
 
-        <h2>Edit Profile</h2>
-        {formData.resume && (
-          <div style={{ marginBottom: "20px" }}>
-            <strong>Current Resume:</strong>
-
-            <br />
-
-            <a
-              href={`http://localhost:3000/uploads/resumes/${formData.resume}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              View Current Resume
-            </a>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Keep your profile updated for recruiters.
+            </p>
           </div>
-        )}
-        <input
-          name="phone"
-          placeholder="Phone"
-          value={formData.phone}
-          onChange={handleChange}
-        />
 
-        <br />
-        <br />
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-lg hover:bg-gray-100 transition"
+          >
+            ✕
+          </button>
+        </div>
 
-        <input
-          name="college"
-          placeholder="College"
-          value={formData.college}
-          onChange={handleChange}
-        />
+        <div className="p-5">
+          {formData.resume && (
+            <div className="mb-6 rounded-xl border bg-gray-50 p-4 flex justify-between items-center">
+              <div>
+                <p className="text-sm text-gray-500">Current Resume</p>
 
-        <br />
-        <br />
+                <a
+                  href={`http://localhost:3000/uploads/resumes/${formData.resume}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium hover:underline"
+                >
+                  View Resume
+                </a>
+              </div>
+            </div>
+          )}
 
-        <input
-          name="degree"
-          placeholder="Degree"
-          value={formData.degree}
-          onChange={handleChange}
-        />
+          <div className="grid grid-cols-2 gap-3">
+            <input
+              name="phone"
+              placeholder="Phone Number"
+              value={formData.phone}
+              onChange={handleChange}
+              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
+            />
 
-        <br />
-        <br />
+            <input
+              name="college"
+              placeholder="College"
+              value={formData.college}
+              onChange={handleChange}
+              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
+            />
 
-        <input
-          name="graduationYear"
-          placeholder="Graduation Year"
-          value={formData.graduationYear}
-          onChange={handleChange}
-        />
+            <input
+              name="degree"
+              placeholder="Degree"
+              value={formData.degree}
+              onChange={handleChange}
+              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
+            />
 
-        <br />
-        <br />
+            <input
+              name="graduationYear"
+              placeholder="Graduation Year"
+              value={formData.graduationYear}
+              onChange={handleChange}
+              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
+            />
 
-        <input
-          name="skills"
-          placeholder="Skills"
-          value={formData.skills}
-          onChange={handleChange}
-        />
+            <input
+              name="experience"
+              placeholder="Experience"
+              value={formData.experience}
+              onChange={handleChange}
+              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
+            />
 
-        <br />
-        <br />
+            <input
+              name="skills"
+              placeholder="Skills"
+              value={formData.skills}
+              onChange={handleChange}
+              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
+            />
 
-        <input
-          name="experience"
-          placeholder="Experience"
-          value={formData.experience}
-          onChange={handleChange}
-        />
+            <input
+              name="linkedin"
+              placeholder="LinkedIn URL"
+              value={formData.linkedin}
+              onChange={handleChange}
+              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
+            />
 
-        <br />
-        <br />
+            <input
+              name="github"
+              placeholder="GitHub URL"
+              value={formData.github}
+              onChange={handleChange}
+              className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black"
+            />
+          </div>
 
-        <input
-          name="linkedin"
-          placeholder="LinkedIn"
-          value={formData.linkedin}
-          onChange={handleChange}
-        />
+          <input
+            name="portfolio"
+            placeholder="Portfolio Website"
+            value={formData.portfolio}
+            onChange={handleChange}
+            className="border rounded-md px-3 py-2 text-sm outline-none focus:border-black w-full mt-4"
+          />
 
-        <br />
-        <br />
+          <div className="mt-6">
+            <label className="block text-xs text-gray-500 mb-1">
+              Upload New Resume
+            </label>
 
-        <input
-          name="github"
-          placeholder="GitHub"
-          value={formData.github}
-          onChange={handleChange}
-        />
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handleResume}
+              className="w-full border rounded-lg p-2"
+            />
+          </div>
 
-        <br />
-        <br />
+          <div className="flex justify-end gap-3 mt-8 border-t pt-6">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 text-sm rounded-md border border-gray-300 hover:bg-gray-100 transition"
+            >
+              Cancel
+            </button>
 
-        <input
-          name="portfolio"
-          placeholder="Portfolio"
-          value={formData.portfolio}
-          onChange={handleChange}
-        />
-
-        <br />
-        <br />
-
-        <input type="file" accept=".pdf" onChange={handleResume} />
-
-        <br />
-        <br />
-
-        <button onClick={handleSave}>Save Profile</button>
-
-        <button
-          onClick={onClose}
-          style={{
-            marginLeft: "10px",
-          }}
-        >
-          Cancel
-        </button>
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 text-sm rounded-md bg-gray-900 text-white hover:bg-black transition"
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
