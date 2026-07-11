@@ -128,84 +128,105 @@ function RecruiterDashboard() {
   };
 
   return (
-    <div style={{ padding: "30px" }}>
-      <h1>Recruiter Dashboard</h1>
+    <div className="max-w-5xl mx-auto px-8 py-8">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900">
+            Recruiter Dashboard
+          </h1>
 
-      <button
-        onClick={() => navigate("/map?mode=post")}
-        style={{
-          padding: "10px 20px",
-          marginBottom: "25px",
-        }}
-      >
-        Post New Job
-      </button>
+          <p className="text-sm text-gray-500 mt-1">
+            Manage your posted jobs and applicants
+          </p>
+        </div>
 
-      <h2>My Jobs</h2>
+        <button
+          onClick={() => navigate("/map?mode=post")}
+          className="bg-gray-900 text-white text-sm px-4 py-2 rounded-lg hover:bg-black transition"
+        >
+          + Post New Job
+        </button>
+      </div>
+
+      <h2 className="text-lg font-semibold mb-4">My Jobs</h2>
 
       {jobs.length === 0 ? (
-        <p>No jobs posted yet.</p>
+        <div className="border border-gray-200 rounded-xl bg-white p-8 text-center text-sm text-gray-500">
+          No jobs posted yet.
+        </div>
       ) : (
-        jobs.map((job) => (
-          <div
-            key={job._id}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              padding: "20px",
-              marginBottom: "20px",
-            }}
-          >
-            <h3>{job.title}</h3>
-
-            <p>
-              <strong>Company:</strong> {job.company}
-            </p>
-
-            <p>
-              <strong>Location:</strong> {job.location}, {job.state}
-            </p>
-
-            <p>
-              <strong>Salary:</strong> ₹{job.salary}
-            </p>
-
-            <button onClick={() => handleViewApplicants(job._id)}>
-              View Applicants
-            </button>
-
-            <button
-              style={{ marginLeft: "10px" }}
-              onClick={() => {
-                setEditingJob(job);
-
-                setEditData({
-                  title: job.title,
-                  company: job.company,
-                  description: job.description,
-                  location: job.location,
-                  state: job.state,
-                  country: job.country,
-                  salary: job.salary,
-                  experience: job.experience,
-                  skills: job.skills.join(", "),
-                  jobType: job.jobType,
-                });
-              }}
+        <div className="grid grid-cols-4 gap-4">
+          {jobs.map((job) => (
+            <div
+              key={job._id}
+              className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition"
             >
-              Edit
-            </button>
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-sm font-semibold">{job.title}</h3>
 
-            <button
-              style={{ marginLeft: "10px" }}
-              onClick={() => handleDelete(job._id)}
-            >
-              Delete
-            </button>
-          </div>
-        ))
+                  <p className="text-xs text-gray-500 mt-1">{job.company}</p>
+                </div>
+
+                <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">
+                  Active
+                </span>
+              </div>
+
+              <div className="space-y-1 mt-4 text-[11px] text-gray-600">
+                <p>📍 {job.location}</p>
+                <p>₹ {job.salary}</p>
+                <p>{job.jobType}</p>
+                <p>{job.experience}</p>
+              </div>
+
+              <div className="flex justify-between items-center mt-5 pt-4 border-t border-gray-200">
+                <span className="text-xs text-gray-500">
+                  Applicants: <strong>{job.applicantCount || 0}</strong>
+                </span>
+
+                <div className="flex flex-col gap-2 mt-4">
+                  <button
+                    onClick={() => handleViewApplicants(job._id)}
+                    className="px-3 py-2 border rounded-lg text-xs hover:bg-gray-100 transition"
+                  >
+                    Applicants
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditingJob(job);
+
+                      setEditData({
+                        title: job.title,
+                        company: job.company,
+                        description: job.description,
+                        location: job.location,
+                        state: job.state,
+                        country: job.country,
+                        salary: job.salary,
+                        experience: job.experience,
+                        skills: job.skills.join(", "),
+                        jobType: job.jobType,
+                      });
+                    }}
+                    className="px-3 py-2 border rounded-lg text-xs hover:bg-gray-100 transition"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(job._id)}
+                    className="px-3 py-2 border border-red-300 text-red-600 rounded-lg text-xs hover:bg-red-50 transition"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
-
       {editingJob && (
         <div
           style={{
