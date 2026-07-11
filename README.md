@@ -66,10 +66,7 @@ CareerAtlas/
 ├── README.md
 └── .gitignore
 ```
-<<<<<<< HEAD
 
-=======
->>>>>>> 2dae011a7f80210c24c81232d59ffc0b4d13f22e
 ## 📌 Key Highlights
 
 - 🌍 Interactive map for location-based job discovery
