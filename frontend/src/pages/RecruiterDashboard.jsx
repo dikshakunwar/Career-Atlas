@@ -504,7 +504,7 @@ function RecruiterDashboard() {
         </div>
       )}
       {showCandidateProfile && candidate && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-6 z-[60]">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-6 z-60">
           <div className="bg-white w-full max-w-3xl rounded-2xl shadow-2xl relative">
             <button
               onClick={() => setShowCandidateProfile(false)}
