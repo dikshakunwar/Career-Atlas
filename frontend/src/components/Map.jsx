@@ -169,133 +169,171 @@ function Map() {
       />
 
       {showJobForm && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            right: 0,
-            width: "350px",
-            height: "100vh",
-            background: "white",
-            padding: "20px",
-            boxShadow: "-2px 0 10px rgba(0,0,0,0.2)",
-            overflowY: "auto",
-          }}
-        >
-          <h2>Post New Job</h2>
+        <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
+          <div className="w-full max-w-md bg-white h-screen overflow-y-auto shadow-2xl">
+            {/* Header */}
+            <div className="flex justify-between items-center px-6 py-5 border-b">
+              <div>
+                <h2 className="text-xl font-semibold">Post New Job</h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Fill in the details below.
+                </p>
+              </div>
 
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="title"
-              placeholder="Job Title"
-              value={jobData.title}
-              onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "10px",
-                border: "2px solid red",
-                marginBottom: "20px",
-              }}
-            />
-            <br />
-            <br />
+              <button
+                onClick={() => setShowJobForm(false)}
+                className="text-2xl text-gray-500 hover:text-black"
+              >
+                ×
+              </button>
+            </div>
 
-            <input
-              type="text"
-              name="company"
-              placeholder="Company"
-              value={jobData.company}
-              onChange={handleChange}
-            />
+            <form onSubmit={handleSubmit} className="p-6 space-y-5">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  Job Title
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={jobData.title}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                  placeholder="Frontend Developer"
+                />
+              </div>
 
-            <br />
-            <br />
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  Company
+                </label>
+                <input
+                  type="text"
+                  name="company"
+                  value={jobData.company}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                  placeholder="Google"
+                />
+              </div>
 
-            <input
-              type="number"
-              name="salary"
-              placeholder="Salary"
-              value={jobData.salary}
-              onChange={handleChange}
-            />
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  Salary
+                </label>
+                <input
+                  type="number"
+                  name="salary"
+                  value={jobData.salary}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                  placeholder="800000"
+                />
+              </div>
 
-            <br />
-            <br />
-            <textarea
-              name="description"
-              placeholder="Job Description"
-              value={jobData.description}
-              onChange={handleChange}
-            />
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  Description
+                </label>
+                <textarea
+                  rows="5"
+                  name="description"
+                  value={jobData.description}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-black"
+                  placeholder="Write job description..."
+                />
+              </div>
 
-            <br />
-            <br />
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">City</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={jobData.location}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                  placeholder="Delhi"
+                />
+              </div>
 
-            <input
-              type="text"
-              name="location"
-              placeholder="City"
-              value={jobData.location}
-              onChange={handleChange}
-            />
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  State
+                </label>
+                <input
+                  type="text"
+                  name="state"
+                  value={jobData.state}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                  placeholder="Delhi"
+                />
+              </div>
 
-            <br />
-            <br />
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  Experience
+                </label>
+                <input
+                  type="text"
+                  name="experience"
+                  value={jobData.experience}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                  placeholder="2 Years"
+                />
+              </div>
 
-            <input
-              type="text"
-              name="state"
-              placeholder="State"
-              value={jobData.state}
-              onChange={handleChange}
-            />
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  Skills
+                </label>
+                <input
+                  type="text"
+                  name="skills"
+                  value={jobData.skills}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                  placeholder="React, Node.js, MongoDB"
+                />
+              </div>
 
-            <br />
-            <br />
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  Job Type
+                </label>
+                <select
+                  name="jobType"
+                  value={jobData.jobType}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                >
+                  <option value="Full-Time">Full-Time</option>
+                  <option value="Part-Time">Part-Time</option>
+                  <option value="Internship">Internship</option>
+                  <option value="Remote">Remote</option>
+                </select>
+              </div>
 
-            <input
-              type="text"
-              name="experience"
-              placeholder="Experience (e.g. 2 Years)"
-              value={jobData.experience}
-              onChange={handleChange}
-            />
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowJobForm(false)}
+                  className="flex-1 border border-gray-300 rounded-lg py-2 text-sm hover:bg-gray-100 transition"
+                >
+                  Cancel
+                </button>
 
-            <br />
-            <br />
-
-            <input
-              type="text"
-              name="skills"
-              placeholder="Skills (React, Node.js, MongoDB)"
-              value={jobData.skills}
-              onChange={handleChange}
-            />
-
-            <br />
-            <br />
-
-            <select
-              name="jobType"
-              value={jobData.jobType}
-              onChange={handleChange}
-            >
-              <option value="Full-Time">Full-Time</option>
-              <option value="Part-Time">Part-Time</option>
-              <option value="Internship">Internship</option>
-              <option value="Remote">Remote</option>
-            </select>
-
-            <br />
-            <br />
-
-            <button type="submit">Post Job</button>
-          </form>
-
-          <br />
-
-          <button onClick={() => setShowJobForm(false)}>Close</button>
+                <button
+                  type="submit"
+                  className="flex-1 bg-gray-900 text-white rounded-lg py-2 text-sm hover:bg-black transition"
+                >
+                  Post Job
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </>

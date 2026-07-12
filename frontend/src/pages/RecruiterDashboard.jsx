@@ -10,6 +10,9 @@ function RecruiterDashboard() {
   const [applicants, setApplicants] = useState([]);
   const [showApplicants, setShowApplicants] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [selectedCandidateId, setSelectedCandidateId] = useState(null);
+  const [candidate, setCandidate] = useState(null);
+  const [showCandidateProfile, setShowCandidateProfile] = useState(false);
   const [editData, setEditData] = useState({
     title: "",
     company: "",
@@ -53,10 +56,10 @@ function RecruiterDashboard() {
       );
 
       setApplicants(
-        applicants.map((app) => (app._id === applicationId ? res.data : app)),
+        applicants.map((app) =>
+          app._id === applicationId ? { ...app, status } : app,
+        ),
       );
-
-      alert(`Application ${status}`);
     } catch (err) {
       console.log(err);
       alert("Failed to update status");
@@ -165,9 +168,7 @@ function RecruiterDashboard() {
           + Post New Job
         </button>
       </div>
-
       <h2 className="text-lg font-semibold mb-4">My Jobs</h2>
-
       {jobs.length === 0 ? (
         <div className="border border-gray-200 rounded-xl bg-white p-8 text-center text-sm text-gray-500">
           No jobs posted yet.
@@ -406,80 +407,256 @@ function RecruiterDashboard() {
         </div>
       )}
       {showApplicants && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            background: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1000,
-          }}
-        >
-          <div
-            style={{
-              background: "#fff",
-              width: "600px",
-              maxHeight: "80vh",
-              overflowY: "auto",
-              padding: "20px",
-              borderRadius: "10px",
-            }}
-          >
-            <h2>Applicants</h2>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white w-full max-w-3xl rounded-xl shadow-xl max-h-[85vh] overflow-y-auto p-6 relative">
+            <button
+              onClick={() => setShowApplicants(false)}
+              className="absolute top-4 right-5 text-xl text-gray-500 hover:text-black"
+            >
+              ×
+            </button>
+
+            <h2 className="text-xl font-semibold">Applicants</h2>
+
+            <p className="text-sm text-gray-500 mt-1 mb-6">
+              Manage candidates who applied for this job.
+            </p>
 
             {applicants.length === 0 ? (
-              <p>No applicants yet.</p>
+              <div className="border border-gray-200 rounded-xl p-10 text-center text-gray-500 text-sm">
+                No applicants yet.
+              </div>
             ) : (
-              applicants.map((app) => (
-                <div
-                  key={app._id}
-                  style={{
-                    border: "1px solid #ddd",
-                    padding: "15px",
-                    marginBottom: "15px",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <h3>{app.applicant.name}</h3>
+              <div className="grid grid-cols-3 gap-4">
+                {applicants.map((app) => (
+                  <div
+                    key={app._id}
+                    className="border border-gray-200 rounded-xl p-3 hover:shadow-md transition overflow-hidden"
+                  >
+                    <div className="flex  justify-between items-start">
+                      <div>
+                        <h3 className="font-semibold text-sm">
+                          {app.applicant.name}
+                        </h3>
 
-                  <p>{app.applicant.email}</p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {app.applicant.email}
+                        </p>
+                      </div>
 
-                  <p>
-                    <strong>Status:</strong> {app.status}
-                  </p>
-                  <div style={{ marginTop: "10px" }}>
-                    <button
-                      onClick={() => handleStatusUpdate(app._id, "Accepted")}
-                    >
-                      Accept
-                    </button>
+                      <span
+                        className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full ${
+                          app.status === "Accepted"
+                            ? "bg-green-100 text-green-700"
+                            : app.status === "Rejected"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-yellow-100 text-yellow-700"
+                        }`}
+                      >
+                        {app.status}
+                      </span>
+                    </div>
 
-                    <button
-                      style={{ marginLeft: "10px" }}
-                      onClick={() => handleStatusUpdate(app._id, "Rejected")}
-                    >
-                      Reject
-                    </button>
+                    <div className="flex gap-2 mt-4">
+                      <button
+                        onClick={async () => {
+                          try {
+                            const res = await API.get(
+                              `/users/${app.applicant._id}`,
+                              {
+                                headers: {
+                                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                                },
+                              },
+                            );
 
-                    <button
-                      style={{ marginLeft: "10px" }}
-                      onClick={() =>
-                        navigate(`/candidate/${app.applicant._id}`)
-                      }
-                    >
-                      View Profile
-                    </button>
+                            setCandidate(res.data);
+                            setSelectedCandidateId(app.applicant._id);
+                            setShowCandidateProfile(true);
+                          } catch (err) {
+                            console.log(err);
+                          }
+                        }}
+                        className="flex-1 border border-gray-300 rounded-lg py-2 text-xs hover:bg-gray-100 transition"
+                      >
+                        View Profile
+                      </button>
+
+                      <button
+                        onClick={() => handleStatusUpdate(app._id, "Accepted")}
+                        className="flex-1 border border-gray-300 rounded-md py-1.5 text-[11px] hover:bg-gray-100 transition"
+                      >
+                        Accept
+                      </button>
+
+                      <button
+                        onClick={() => handleStatusUpdate(app._id, "Rejected")}
+                        className="flex-1 border border-gray-300 rounded-md py-1.5 text-[11px] hover:bg-gray-100 transition"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      {showCandidateProfile && candidate && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-6 z-[60]">
+          <div className="bg-white w-full max-w-3xl rounded-2xl shadow-2xl relative">
+            <button
+              onClick={() => setShowCandidateProfile(false)}
+              className="absolute right-5 top-4 text-xl"
+            >
+              ×
+            </button>
+
+            <div className="p-6 border-b">
+              <h2 className="text-xl font-semibold">Candidate Profile</h2>
+              <p className="text-sm text-gray-500">Review applicant details</p>
+            </div>
+
+            <div className="px-8 py-6 max-h-[70vh] overflow-y-auto">
+              <div className="border rounded-xl p-5 mb-5">
+                <h3 className="text-sm font-semibold mb-4">
+                  Personal Information
+                </h3>
+
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-500 text-xs">Name</p>
+                    <p>{candidate.name}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-500 text-xs">Email</p>
+                    <p>{candidate.email}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-500 text-xs">Phone</p>
+                    <p>{candidate.phone || "Not Added"}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-500 text-xs">Experience</p>
+                    <p>{candidate.experience || "Fresher"}</p>
                   </div>
                 </div>
-              ))
-            )}
+              </div>
 
-            <button onClick={() => setShowApplicants(false)}>Close</button>
+              <div className="border rounded-xl p-5 mb-5">
+                <h3 className="text-sm font-semibold mb-4">Education</h3>
+
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-500 text-xs">College</p>
+                    <p>{candidate.college || "Not Added"}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-500 text-xs">Degree</p>
+                    <p>{candidate.degree || "Not Added"}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-500 text-xs">Graduation Year</p>
+                    <p>{candidate.graduationYear || "Not Added"}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="border rounded-xl p-5 mb-5">
+                <h3 className="text-sm font-semibold mb-4">Skills</h3>
+
+                <div className="flex flex-wrap gap-2">
+                  {candidate.skills?.length ? (
+                    candidate.skills.map((skill, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-gray-100 rounded-full text-xs"
+                      >
+                        {skill}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500">No skills added.</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="border rounded-xl p-5 mb-5">
+                <h3 className="text-sm font-semibold mb-4">Links</h3>
+
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span>LinkedIn</span>
+
+                    {candidate.linkedin ? (
+                      <a
+                        href={candidate.linkedin}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Open
+                      </a>
+                    ) : (
+                      <span className="text-gray-400">Not Added</span>
+                    )}
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>GitHub</span>
+
+                    {candidate.github ? (
+                      <a
+                        href={candidate.github}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Open
+                      </a>
+                    ) : (
+                      <span className="text-gray-400">Not Added</span>
+                    )}
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Portfolio</span>
+
+                    {candidate.portfolio ? (
+                      <a
+                        href={candidate.portfolio}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Open
+                      </a>
+                    ) : (
+                      <span className="text-gray-400">Not Added</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {candidate.resume && (
+                <div className="border rounded-xl p-5">
+                  <h3 className="text-sm font-semibold mb-4">Resume</h3>
+
+                  <a
+                    href={`http://localhost:3000/uploads/resumes/${candidate.resume}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center px-4 py-2 bg-gray-900 text-white rounded-lg text-sm hover:bg-black"
+                  >
+                    📄 View Resume
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
