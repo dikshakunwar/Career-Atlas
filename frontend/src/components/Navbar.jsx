@@ -22,7 +22,7 @@ function Navbar() {
         >
           CareerAtlas
         </Link>
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-sm font-medium order-3 w-full lg:order-none lg:w-auto">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-sm font-medium order-3 w-full lg:ordernone lg:w-auto">
           {" "}
           <NavLink
             to="/"
