@@ -122,8 +122,6 @@ function RecruiterDashboard() {
       );
 
       setEditingJob(null);
-
-      alert("Job updated successfully.");
     } catch (err) {
       console.log(err.response?.data || err);
 
@@ -140,8 +138,6 @@ function RecruiterDashboard() {
       });
 
       setJobs(jobs.filter((job) => job._id !== id));
-
-      alert("Job deleted successfully");
     } catch (err) {
       console.log(err);
       alert("Failed to delete job");

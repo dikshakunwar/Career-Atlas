@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import API from "../services/api";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -13,6 +13,7 @@ function Map() {
   const selectedMarker = useRef(null);
   const [showJobForm, setShowJobForm] = useState(false);
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const isPostMode = searchParams.get("mode") === "post";
   const [jobData, setJobData] = useState({
     title: "",
@@ -30,13 +31,13 @@ function Map() {
     e.preventDefault();
 
     try {
-      await API.post(
+      const res = await API.post(
         "/jobs",
         {
           ...jobData,
           latitude: selectedLocation.latitude,
           longitude: selectedLocation.longitude,
-          skills: jobData.skills.split(","),
+          skills: jobData.skills.split(",").map((skill) => skill.trim()),
         },
         {
           headers: {
@@ -47,9 +48,29 @@ function Map() {
 
       alert("Job Posted Successfully");
 
-      setShowJobForm(false);
+      await fetchJobs();
 
-      window.location.reload();
+      setShowJobForm(false);
+      navigate("/map", { replace: true });
+      setSelectedLocation(null);
+
+      // Remove the red marker from the map
+      if (selectedMarker.current) {
+        selectedMarker.current.remove();
+        selectedMarker.current = null;
+      }
+
+      setJobData({
+        title: "",
+        company: "",
+        salary: "",
+        description: "",
+        location: "",
+        state: "",
+        experience: "",
+        skills: "",
+        jobType: "Full-Time",
+      });
     } catch (err) {
       console.log(err);
       alert("Failed to post job");
@@ -61,7 +82,14 @@ function Map() {
       [e.target.name]: e.target.value,
     });
   };
-
+  const fetchJobs = async () => {
+    try {
+      const res = await API.get("/jobs");
+      setJobs(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
     if (map.current) return;
 
@@ -72,25 +100,33 @@ function Map() {
       zoom: 4,
     });
 
-    map.current.on("click", (e) => {
+    fetchJobs();
+  }, []);
+  useEffect(() => {
+    if (!map.current) return;
+
+    const handleMapClick = (e) => {
       if (!isPostMode) return;
+
       const { lng, lat } = e.lngLat;
 
       setSelectedLocation({
         latitude: lat,
         longitude: lng,
       });
+
       setShowJobForm(true);
+
       if (selectedMarker.current) {
         selectedMarker.current.remove();
       }
 
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
-    <div>
-      <h3>Selected Location</h3>
-      <button id="post-job-btn">Post Job Here</button>
-    </div>
-  `);
+      <div>
+        <h3>Selected Location</h3>
+        <button id="post-job-btn">Post Job Here</button>
+      </div>
+    `);
 
       selectedMarker.current = new mapboxgl.Marker({ color: "red" })
         .setLngLat([lng, lat])
@@ -98,19 +134,14 @@ function Map() {
         .addTo(map.current);
 
       selectedMarker.current.togglePopup();
-    });
-
-    const fetchJobs = async () => {
-      try {
-        const res = await API.get("/jobs");
-        setJobs(res.data);
-      } catch (err) {
-        console.log(err);
-      }
     };
 
-    fetchJobs();
-  }, []);
+    map.current.on("click", handleMapClick);
+
+    return () => {
+      map.current.off("click", handleMapClick);
+    };
+  }, [isPostMode]);
   useEffect(() => {
     console.log("Selected Location:", selectedLocation);
   }, [selectedLocation]);
@@ -181,7 +212,10 @@ function Map() {
               </div>
 
               <button
-                onClick={() => setShowJobForm(false)}
+                onClick={() => {
+                  setShowJobForm(false);
+                  navigate("/map", { replace: true });
+                }}
                 className="text-2xl text-gray-500 hover:text-black"
               >
                 ×
@@ -319,7 +353,10 @@ function Map() {
               <div className="flex gap-3 pt-4">
                 <button
                   type="button"
-                  onClick={() => setShowJobForm(false)}
+                  onClick={() => {
+                    setShowJobForm(false);
+                    navigate("/map", { replace: true });
+                  }}
                   className="flex-1 border border-gray-300 rounded-lg py-2 text-sm hover:bg-gray-100 transition"
                 >
                   Cancel
