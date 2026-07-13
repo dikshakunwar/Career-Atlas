@@ -95,11 +95,18 @@ function Map() {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v12",
       center: [78.9629, 20.5937],
       zoom: 4,
     });
-
+    map.current.on("style.load", () => {
+      map.current.setFog({
+        color: "#ffffff",
+        "high-color": "#dbeafe",
+        "space-color": "#bfdbfe",
+        "horizon-blend": 0.15,
+        "star-intensity": 0,
+      });
+    });
     fetchJobs();
   }, []);
   useEffect(() => {

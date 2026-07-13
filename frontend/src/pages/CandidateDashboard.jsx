@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import EditProfileModal from "../components/EditProfileModal";
 import { useNavigate } from "react-router-dom";
+import { Menu } from "lucide-react";
 
 function CandidateDashboard() {
   const [applications, setApplications] = useState([]);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showSideMenu, setShowSideMenu] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,11 +20,9 @@ function CandidateDashboard() {
           },
         });
 
-        console.log("Applications API Response:", res.data);
-
         setApplications(res.data);
       } catch (err) {
-        console.log("Error:", err.response);
+        console.log(err);
       }
     };
 
@@ -42,69 +43,85 @@ function CandidateDashboard() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-8 py-8">
-      <div className="grid grid-cols-12 gap-8">
-        <div className="col-span-8">
-          <h1 className="text-3xl font-semibold">My Applications</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Applications */}
 
-          <p className="text-gray-500 text-sm mt-1 mb-6">
-            Track your applications and profile
-          </p>
+        <div className="lg:col-span-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-semibold">
+                My Applications
+              </h1>
 
-          {applications.length === 0 ? (
-            <p className="text-gray-500">
-              You haven't applied to any jobs yet.
-            </p>
-          ) : (
-            <div className="grid grid-cols-2 gap-5">
-              {applications
-                .filter((application) => application.job)
-                .map((application) => (
-                  <div
-                    key={application._id}
-                    onClick={() => navigate(`/job/${application.job._id}`)}
-                    className=" bg-white border border-gray-200 rounded-xl p-4 cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-                  >
-                    <div className="flex justify-between items-start">
-                      <h3 className="font-semibold text-sm leading-5">
-                        {application.job.title}
-                      </h3>
-
-                      <span
-                        className={`text-[10px] px-2 py-1 rounded-full ${getStatusStyle(
-                          application.status,
-                        )}`}
-                      >
-                        {application.status}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-gray-500 mt-2">
-                      {application.job.company}
-                    </p>
-
-                    <div className="mt-3 space-y-1 text-xs text-gray-500">
-                      <p>📍 {application.job.location}</p>
-
-                      <p>₹ {application.job.salary}</p>
-
-                      <p>{application.job.jobType}</p>
-                    </div>
-
-                    <p className="mt-4 text-[11px] text-gray-400">
-                      Applied on{" "}
-                      {new Date(application.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                ))}
+              <p className="text-gray-500 text-sm mt-1">
+                Track your applications and profile
+              </p>
             </div>
-          )}
-        </div>
 
-        <div className="col-span-4 relative">
+            <button
+              onClick={() => setShowSideMenu(true)}
+              className="lg:hidden border border-gray-300 rounded-lg p-2 hover:bg-gray-100 transition"
+            >
+              <Menu size={22} />
+            </button>
+          </div>
+
+          <div className="mt-8">
+            {applications.length === 0 ? (
+              <div className="bg-white border rounded-xl p-8 text-center text-gray-500">
+                You haven't applied to any jobs yet.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {applications
+                  .filter((application) => application.job)
+                  .map((application) => (
+                    <div
+                      key={application._id}
+                      onClick={() => navigate(`/job/${application.job._id}`)}
+                      className="bg-white border border-gray-200 rounded-xl p-5 cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                    >
+                      <div className="flex justify-between items-start gap-3">
+                        <h3 className="font-semibold text-base leading-6">
+                          {application.job.title}
+                        </h3>
+
+                        <span
+                          className={`text-xs px-3 py-1 rounded-full whitespace-nowrap ${getStatusStyle(
+                            application.status,
+                          )}`}
+                        >
+                          {application.status}
+                        </span>
+                      </div>
+
+                      <p className="text-sm text-gray-500 mt-2">
+                        {application.job.company}
+                      </p>
+
+                      <div className="mt-4 space-y-2 text-sm text-gray-500">
+                        <p>📍 {application.job.location}</p>
+                        <p>₹ {application.job.salary}</p>
+                        <p>{application.job.jobType}</p>
+                      </div>
+
+                      <p className="mt-5 text-xs text-gray-400">
+                        Applied on{" "}
+                        {new Date(application.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+        </div>
+        {/* Desktop Profile */}
+
+        <div className="hidden lg:block lg:col-span-4">
           <div className="sticky top-24 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
             <div className="flex flex-col items-center">
-              <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-3xl">
+              <div className="w-24 h-24 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-4xl">
                 👤
               </div>
 
@@ -114,16 +131,16 @@ function CandidateDashboard() {
                   : ""}
               </h2>
 
-              <p className="text-gray-500 text-sm">Candidate</p>
+              <p className="text-sm text-gray-500">Candidate</p>
             </div>
 
-            <div className="border-t my-5"></div>
+            <div className="border-t my-6"></div>
 
-            <div className="space-y-3 text-sm">
+            <div className="space-y-4 text-sm">
               <div>
-                <span className="text-gray-500">Email</span>
+                <p className="text-gray-500">Email</p>
 
-                <p className="font-medium">
+                <p className="font-medium break-all">
                   {localStorage.getItem("user")
                     ? JSON.parse(localStorage.getItem("user")).email
                     : ""}
@@ -131,7 +148,7 @@ function CandidateDashboard() {
               </div>
 
               <div>
-                <span className="text-gray-500">Resume</span>
+                <p className="text-gray-500">Resume</p>
 
                 <p className="font-medium">Uploaded ✓</p>
               </div>
@@ -139,13 +156,81 @@ function CandidateDashboard() {
 
             <button
               onClick={() => setShowProfileModal(true)}
-              className="mt-6 w-full border border-gray-900 rounded-lg py-2 text-sm hover:bg-gray-900 hover:text-white transition"
+              className="w-full mt-8 border border-gray-900 rounded-lg py-2.5 text-sm font-medium hover:bg-gray-900 hover:text-white transition"
             >
               Edit Profile
             </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Profile Drawer */}
+
+      {showSideMenu && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/40 z-40"
+            onClick={() => setShowSideMenu(false)}
+          />
+
+          <div className="fixed top-0 right-0 h-full w-80 max-w-full bg-white shadow-2xl z-50 p-6 overflow-y-auto">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold">My Profile</h2>
+
+              <button
+                onClick={() => setShowSideMenu(false)}
+                className="text-2xl text-gray-500 hover:text-black transition"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="flex flex-col items-center mt-8">
+              <div className="w-24 h-24 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-4xl">
+                👤
+              </div>
+
+              <h3 className="mt-4 text-lg font-semibold">
+                {localStorage.getItem("user")
+                  ? JSON.parse(localStorage.getItem("user")).name
+                  : ""}
+              </h3>
+
+              <p className="text-sm text-gray-500">Candidate</p>
+            </div>
+
+            <div className="border-t my-6"></div>
+
+            <div className="space-y-4 text-sm">
+              <div>
+                <p className="text-gray-500">Email</p>
+
+                <p className="break-all">
+                  {localStorage.getItem("user")
+                    ? JSON.parse(localStorage.getItem("user")).email
+                    : ""}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-gray-500">Resume</p>
+
+                <p>Uploaded ✓</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                setShowSideMenu(false);
+                setShowProfileModal(true);
+              }}
+              className="w-full mt-8 bg-gray-900 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-black transition"
+            >
+              Edit Profile
+            </button>
+          </div>
+        </>
+      )}
 
       <EditProfileModal
         show={showProfileModal}
