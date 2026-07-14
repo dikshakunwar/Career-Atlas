@@ -55,18 +55,27 @@ function JobDetails() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-8 py-8">
-      <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <div className="flex justify-between items-start">
-          <div>
-            <h1 className="text-2xl font-semibold">{job.title}</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      {/* Job Header */}
 
-            <p className="text-sm text-gray-600 mt-1">{job.company}</p>
+      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-5">
+          <div className="flex-1">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold">
+              {job.title}
+            </h1>
 
-            <div className="flex gap-5 text-xs text-gray-500 mt-3 flex-wrap">
+            <p className="text-sm sm:text-base text-gray-600 mt-1">
+              {job.company}
+            </p>
+
+            <div className="flex flex-wrap gap-x-5 gap-y-2 text-[12px] sm:text-sm text-gray-500 mt-4">
               <span>📍 {job.location}</span>
+
               <span>💰 ₹ {job.salary}</span>
+
               <span>💼 {job.jobType}</span>
+
               <span>⭐ {job.experience}</span>
             </div>
           </div>
@@ -74,70 +83,122 @@ function JobDetails() {
           {user?.role === "user" && (
             <button
               onClick={handleApply}
-              className="px-5 py-2 border border-gray-900 rounded-lg text-sm hover:bg-gray-900 hover:text-white transition"
+              className="w-full sm:w-auto px-6 py-2.5 border border-gray-900 rounded-lg text-sm font-medium hover:bg-gray-900 hover:text-white transition"
             >
               Apply Now
             </button>
           )}
         </div>
       </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-5">
+        {/* Left Section */}
 
-      <div className="grid grid-cols-12 gap-5 mt-5">
-        <div className="col-span-8">
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-base font-semibold mb-3">Description</h2>
+        <div className="lg:col-span-8 space-y-5">
+          {/* Description */}
 
-            <p className="font-normal text-sm whitespace-pre-line">
-              {job.description}
-            </p>
+          <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold mb-4">
+              Description
+            </h2>
+
+            <div className="text-sm leading-7 text-gray-700 whitespace-pre-wrap">
+              {job.description.split("\n").map((line, index) => {
+                const headings = [
+                  "Description",
+                  "Key Responsibilities",
+                  "Responsibilities",
+                  "Requirements",
+                  "Required Skills",
+                  "Qualifications",
+                  "Eligibility",
+                  "Employee Benefit",
+                  "Perks",
+                  "About the Company",
+                  "About Company",
+                  "Job Description",
+                ];
+
+                const matchedHeading = headings.find((heading) =>
+                  line.trim().toLowerCase().startsWith(heading.toLowerCase()),
+                );
+
+                return (
+                  <div key={index}>
+                    {matchedHeading ? <strong>{line}</strong> : line}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-xl p-5 mt-5">
-            <h2 className="text-base font-semibold mb-3">Skills</h2>
+          {/* Skills */}
 
-            <div className="flex flex-wrap gap-2">
-              {job.skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 border border-gray-300 rounded-md text-xs hover:bg-gray-900 hover:text-white transition"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
+          <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold mb-4">
+              Required Skills
+            </h2>
+
+            <p className="text-sm text-gray-700 leading-7">
+              {Array.isArray(job.skills) ? job.skills.join(", ") : job.skills}
+            </p>
           </div>
         </div>
 
-        <div className="col-span-4">
-          <div className="bg-white border border-gray-200 rounded-xl p-5 sticky top-24">
-            <h2 className="text-base font-semibold mb-4">Overview</h2>
+        {/* Overview */}
 
-            <div className="space-y-4 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-500">Company</span>
-                <span>{job.company}</span>
+        <div className="lg:col-span-4">
+          <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 lg:sticky lg:top-24">
+            <h2 className="text-base sm:text-lg font-semibold mb-5">
+              Job Overview
+            </h2>
+
+            <div className="space-y-4">
+              <div className="flex justify-between items-start gap-4 text-sm">
+                <span className="text-gray-500 shrink-0">Company</span>
+                <span className="font-medium text-right break-words">
+                  {job.company}
+                </span>
               </div>
 
-              <div className="flex justify-between">
-                <span className="text-gray-500">Location</span>
-                <span>{job.location}</span>
+              <div className="border-t"></div>
+
+              <div className="flex justify-between items-start gap-4 text-sm">
+                <span className="text-gray-500 shrink-0">Location</span>
+                <span className="font-medium text-right break-words">
+                  {job.location}
+                </span>
               </div>
 
-              <div className="flex justify-between">
-                <span className="text-gray-500">Salary</span>
-                <span>₹ {job.salary}</span>
+              <div className="border-t"></div>
+
+              <div className="flex justify-between items-start gap-4 text-sm">
+                <span className="text-gray-500 shrink-0">Salary</span>
+                <span className="font-medium text-right">₹ {job.salary}</span>
               </div>
 
-              <div className="flex justify-between">
-                <span className="text-gray-500">Experience</span>
-                <span>{job.experience}</span>
+              <div className="border-t"></div>
+
+              <div className="flex justify-between items-start gap-4 text-sm">
+                <span className="text-gray-500 shrink-0">Experience</span>
+                <span className="font-medium text-right">{job.experience}</span>
               </div>
 
-              <div className="flex justify-between">
-                <span className="text-gray-500">Job Type</span>
-                <span>{job.jobType}</span>
+              <div className="border-t"></div>
+
+              <div className="flex justify-between items-start gap-4 text-sm">
+                <span className="text-gray-500 shrink-0">Job Type</span>
+                <span className="font-medium text-right">{job.jobType}</span>
               </div>
             </div>
+
+            {user?.role === "user" && (
+              <button
+                onClick={handleApply}
+                className="mt-6 w-full bg-gray-900 text-white rounded-lg py-3 text-sm font-medium hover:bg-black transition sm:hidden"
+              >
+                Apply Now
+              </button>
+            )}
           </div>
         </div>
       </div>
