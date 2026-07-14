@@ -7,9 +7,7 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Hero */}
-
-      <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28">
+      <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-8 pb-16 sm:pt-10 sm:pb-20 lg:pt-12 lg:pb-28">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -32,18 +30,19 @@ function Home() {
           </p>
 
           {/* Search */}
+          <div className="mt-10 flex justify-center">
+            <div className="bg-white shadow-lg rounded-2xl flex items-center w-full max-w-xl px-3 sm:px-5 py-2 sm:py-3">
+              <Search className="text-gray-400 " size={18} />
 
-          <div className="mt-12 flex justify-center">
-            <div className="bg-white shadow-lg rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-0 px-4 sm:px-5 py-4 sm:py-3 w-full max-w-xl">
-              <Search className="text-gray-400" />
               <input
                 type="text"
                 placeholder="Search jobs..."
-                className="flex-1 outline-none px-2 sm:px-4 py-2 text-sm sm:text-base text-gray-700"
+                className="flex-1 outline-none px-2 sm:px-4 text-sm sm:text-base text-gray-700"
               />
+
               <button
                 onClick={() => navigate("/map")}
-                className="w-full sm:w-auto bg-gray-900 text-white px-5 py-2.5 rounded-xl hover:bg-black transition"
+                className="bg-gray-900 text-white text-sm sm:text-base px-4 sm:px-5 py-2 rounded-xl hover:bg-black transition whitespace-nowrap"
               >
                 Search
               </button>
