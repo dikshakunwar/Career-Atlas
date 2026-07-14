@@ -520,7 +520,7 @@ function RecruiterDashboard() {
         </div>
       )}
       {showCandidateProfile && candidate && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-3 sm:p-6 z-[60]">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-3 sm:p-6 z-50">
           <div className="bg-white w-full max-w-3xl rounded-2xl shadow-2xl relative max-h-[92vh] overflow-hidden">
             <button
               onClick={() => setShowCandidateProfile(false)}
@@ -550,7 +550,7 @@ function RecruiterDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-gray-500 text-xs">Name</p>
-                    <p className="break-words">{candidate.name}</p>
+                    <p className="wrap-break-word">{candidate.name}</p>
                   </div>
 
                   <div>

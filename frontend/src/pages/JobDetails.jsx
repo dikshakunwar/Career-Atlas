@@ -155,7 +155,7 @@ function JobDetails() {
             <div className="space-y-4">
               <div className="flex justify-between items-start gap-4 text-sm">
                 <span className="text-gray-500 shrink-0">Company</span>
-                <span className="font-medium text-right break-words">
+                <span className="font-medium text-right wrap-break-word">
                   {job.company}
                 </span>
               </div>
@@ -164,7 +164,7 @@ function JobDetails() {
 
               <div className="flex justify-between items-start gap-4 text-sm">
                 <span className="text-gray-500 shrink-0">Location</span>
-                <span className="font-medium text-right break-words">
+                <span className="font-medium text-right wrap-break-word">
                   {job.location}
                 </span>
               </div>
